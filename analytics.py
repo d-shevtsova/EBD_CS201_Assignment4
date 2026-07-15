@@ -45,7 +45,11 @@ for sale in sales:
         category[cat] = 0
     category[cat] +=sale["net_profit"]
 # сер профіт, фільтр, сортування у топ -> у json
-
+avr = sum(category.values()/len(category))
+top = dict(filter(lambda x: x[1]>avr, category.items()))
+top = dict(sorted(top.items(), key=lambda x: x[1], reverse=True))
+with open("top_categoty.json", "w") as top_categoty:
+    json.dump(top, top_categoty, indent=4)
 # dataFrame
 
 # стовпчаста діаграма
