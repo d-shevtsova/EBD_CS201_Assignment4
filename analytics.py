@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import json
 import csv
 
+from matplotlib import colors
+
 # читаємо файли
 sales = []
 
@@ -45,11 +47,22 @@ for sale in sales:
         category[cat] = 0
     category[cat] +=sale["net_profit"]
 # сер профіт, фільтр, сортування у топ -> у json
-avr = sum(category.values()/len(category))
+avr = (sum(category.values())/len(category))
 top = dict(filter(lambda x: x[1]>avr, category.items()))
 top = dict(sorted(top.items(), key=lambda x: x[1], reverse=True))
 with open("top_categoty.json", "w") as top_categoty:
     json.dump(top, top_categoty, indent=4)
 # dataFrame
-
+df = pd.DataFrame(list(category.items()), columns=["category", "net_profit"])
+print(df)
 # стовпчаста діаграма
+colors = ["red","orange","yellow","green","blue","purple","pink","brown"]
+plt.figure(figsize = (10,6))
+plt.bar(df["category"], df["net_profit"],color = colors)
+plt.title("Top Categories")
+plt.xlabel("Category")
+plt.ylabel("Net Profit")
+
+plt.xticks(rotation=30)
+plt.tight_layout()
+plt.show()
