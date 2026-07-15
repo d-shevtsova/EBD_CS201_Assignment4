@@ -8,11 +8,11 @@ from matplotlib import colors
 # читаємо файли
 sales = []
 
-with open("global_sales.csv", "r") as sales_file:
+with open("global_sales.csv", "r", encoding="UTF-8") as sales_file:
     reader = csv.DictReader(sales_file)
     for row in reader:
         sales.append(row)
-with open("regional_tariffs.json", "r") as file:
+with open("regional_tariffs.json", "r", encoding="UTF-8") as file:
     tariffs = json.load(file)
 # очистка від помилок
 for sale in sales:
@@ -34,7 +34,7 @@ for sale in sales:
     sale["net_profit"] = round(sale["revenue"]-sale["revenue"] * tariff/100,2)
 # новий датасет сlean_sales_upd
 filename = list(sales[0].keys())
-with open("cleaned_sales_updated.csv", "w", newline="") as cleaned:
+with open("cleaned_sales_updated.csv", "w", newline="", encoding="UTF-8") as cleaned:
     smth = csv.DictWriter(cleaned, filename)
     smth.writeheader()
     smth.writerows(sales)
@@ -50,13 +50,13 @@ for sale in sales:
 avr = (sum(category.values())/len(category))
 top = dict(filter(lambda x: x[1]>avr, category.items()))
 top = dict(sorted(top.items(), key=lambda x: x[1], reverse=True))
-with open("top_categoty.json", "w") as top_categoty:
+with open("top_categoty.json", "w", encoding="UTF-8") as top_categoty:
     json.dump(top, top_categoty, indent=4)
 # dataFrame
 df = pd.DataFrame(list(category.items()), columns=["category", "net_profit"])
 print(df)
 # стовпчаста діаграма
-colors = ["red","orange","yellow","green","blue","purple","pink","brown"]
+colors = ["red","orange","yellow","green","blue","dark blue","purple","pink"]
 plt.figure(figsize = (10,6))
 plt.bar(df["category"], df["net_profit"],color = colors)
 plt.title("Top Categories")
