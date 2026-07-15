@@ -29,7 +29,7 @@ for region in tariffs.keys():
 # обчислення нет-профіту
 for sale in sales:
     tariff = tariffs.get(sale["region"])
-    sale['revenue'] = round(sale["revenue"] * tariff/100,2)
+    sale["net_profit"] = round(sale["revenue"]-sale["revenue"] * tariff/100,2)
 # новий датасет сlean_sales_upd
 filename = list(sales[0].keys())
 with open("cleaned_sales_updated.csv", "w", newline="") as cleaned:
@@ -37,7 +37,13 @@ with open("cleaned_sales_updated.csv", "w", newline="") as cleaned:
     smth.writeheader()
     smth.writerows(sales)
 # cумарний профіт по категоріях
+category = {}
 
+for sale in sales:
+    cat=sale["product_category"]
+    if cat not in category:
+        category[cat] = 0
+    category[cat] +=sale["net_profit"]
 # сер профіт, фільтр, сортування у топ -> у json
 
 # dataFrame
